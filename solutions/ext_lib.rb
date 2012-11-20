@@ -22,3 +22,20 @@ class Fiboacci
 end
 
 
+class Integer
+  def proper_factors
+    1.upto(self).select {|x| (self%x).zero? }.to_a[0..-2]
+  end
+  def prime?
+    proper_factors.length == 1
+  end
+  def abundant_number?
+    self < self.proper_factors.inject(&:+)
+  end
+  def perfect_number?
+    self == self.proper_factors.inject(&:+)
+  end
+  def deficient_number?
+    self > self.proper_factors.inject(&:+)
+  end
+end
