@@ -1,4 +1,5 @@
-# --*-- coding: gbk --*--
+#!/usr/bin/python
+# --*-- coding: utf-8 --*--
 
 from alg import isprime
 from alg import islcm
@@ -13,13 +14,15 @@ from alg import filecontent
 #from alg import UNUSED
 from alg import ncombinations
 from alg import reversedNumber
-from msilib.schema import ReserveCost
+#from msilib.schema import ReserveCost
 #from itertools import combinations
 
 
 
 # answer is 232169
-def problem1(): # corrected
+ # corrected
+
+def problem1():
     s = i = 0
     while i < 1000:
         if (i % 3 == 0) or (i % 5 == 0):
@@ -407,7 +410,7 @@ def problem14():    # the algorithm is too complex
 
 
 def problem14_1(n):
-    '''返回循环数量'''
+    '''杩斿洖寰幆鏁伴噺'''
     i = n
     count = 0
     while i != 1:
@@ -736,4 +739,4 @@ def problem55():
         
     
 if __name__ == "__main__":
-    runtime(problem12)
+    runtime(problem13)
