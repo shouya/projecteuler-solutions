@@ -39,3 +39,16 @@ class Integer
     self > self.proper_factors.inject(&:+)
   end
 end
+
+# A fast combination count algorithm
+def combination_count(n, r)
+  rst = 1
+  n.downto(n - r + 1) do |x|
+    rst *= x
+  end
+  r.downto(2) do |x|
+    rst /= x
+  end
+  rst
+end
+
