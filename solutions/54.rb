@@ -20,6 +20,7 @@ class Card
   include Comparable
 
   attr_accessor :suit, :value
+
   class << self
     def convert_value(str)
       case str
@@ -41,14 +42,15 @@ class Card
     end
   end
 
-  def load(str)
+  def initialize(str)
     @value = Card.convert_value(str[0])
     @suit = Card.convert_suit(str[1])
     self
   end
 
   def <=>(another)
-    (@value * 4 + @suit) <=> (another.value * 4 + another.suit)
+#    (@value * 4 + @suit) <=> (another.value * 4 + another.suit)
+    @value <=> another.value
   end
 end
 
@@ -57,10 +59,9 @@ class Hand
 
   attr_accessor :cards
 
-  def load(list)
-    @cards = list.map do |x|
-      Card.new.tap {|c| c.load(x) }
-    end
+  def initialize(list)
+    list.is_a? Array or list = list.split(' ')
+    @cards = list.map {|x| Card.new(x) }
     self
   end
 
@@ -79,6 +80,7 @@ class Hand
     values.delete_if {|x| values.count(x) == 1}
     uniq_vals = values.dup.uniq
     uniq_vals.zip(uniq_vals.map {|x| values.count(x) })
+      .sort {|x,y| x[1] <=> y[1]}
   end
 
   def evaluate
@@ -86,35 +88,43 @@ class Hand
 
     if s = straight? and f = flush?
       if @cards.sort.first.value == 10
-        return [:royal_flush, 0, @cards]
+        return [:royal_flush, 0, []]
       end
-      return [:straight_flush, s, @cards]
+      return [:straight_flush, s, []]
     end
 
     groups = n_of_kind
-    if groups.map(&:last) == [1]
-      return [:four_of_a_kind, groups[0].first, @cards]
+    if groups.map(&:last) == [4]
+      return [:four_of_a_kind, groups[0].first,
+              @cards.map(&:value).tap{|a| a.delete(groups[0].first)}.sort]
     end
     if groups.map(&:last).sort == [2, 3]
-      return [:full_house, groups.map(&:first).sort.last, @cards]
+      return [:full_house, groups[1].first,
+              @cards.map(&:value).tap {|a|
+                groups.map(&:first).each {|x| a.delete(x)}}.sort]
     end
+
     if f = flush?
-      return [:flush, f, @cards]
+      return [:flush, f, []]
     end
     if s = straight?
-      return [:straight, s, @cards]
+      return [:straight, s, []]
     end
 
     case groups.map(&:last).sort
     when [3]
-      return [:three_of_a_kind, groups[0].first, @cards]
+      return [:three_of_a_kind, groups[0].first,
+             @cards.map(&:value) - ([groups[0].first] * 3)]
     when [2, 2]
-      return [:two_pairs, groups.map(&:first).sort.last, @cards]
+      return [:two_pairs, groups.map(&:first).sort.last,
+              @cards.map(&:value).tap {|a|
+                groups.map(&:first).each {|x| a.delete(x)}}.sort]
     when [2]
-      return [:one_pair, groups[0].first, @cards]
+      return [:one_pair, groups[0].first,
+              @cards.map(&:value).tap {|a| a.delete(groups[0].first)}]
     end
 
-    return [:high_card, cards.map(&:value).sort.last, @cards]
+    return [:high_card, cards.map(&:value).sort.last, @cards.map(&:value).sort]
   end
 
   def <=>(another)
@@ -134,8 +144,8 @@ end
 
 counter = 0
 list.each do |(x,y)|
-  counter += 1 if Hand.new.tap {|a| a.load(x) } > Hand.new.tap {|a| a.load(y) }
+  counter += 1 if Hand.new(x) > Hand.new(y)
 end
 
 puts counter
-
+nil
