@@ -1,3 +1,4 @@
+#
 
 
 require 'ap'
@@ -52,3 +53,8 @@ def combination_count(n, r)
   rst
 end
 
+class String
+  def pandigital?
+    each_char.sort.uniq.length == length
+  end
+end
