@@ -25,7 +25,7 @@ end
 
 class Integer
   def proper_factors
-    1.upto(self).select {|x| (self%x).zero? }.to_a[0..-2]
+    1.upto((self / 2) + 1).select {|x| (self%x).zero? }.to_a
   end
   def prime?
     proper_factors.length == 1
@@ -56,5 +56,17 @@ end
 class String
   def pandigital?
     each_char.sort.uniq.length == length
+  end
+end
+
+
+class Array
+  # binary search for sorted array
+  def binary_search(ele, lo = 0, hi = self.length - 1)
+    return (ele == self[lo]) ? lo : nil if lo == hi
+    mid = (lo + hi) / 2
+    return mid if ele == self[mid]
+    return binary_search(ele, lo, mid) if ele < self[mid]
+    return binary_search(ele, mid + 1, hi)
   end
 end
