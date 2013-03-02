@@ -39,6 +39,19 @@ class Integer
   def deficient_number?
     self > self.proper_factors.inject(&:+)
   end
+
+  def square
+    self * self
+  end
+  def digits
+    rst = []
+    tmp = self
+    while tmp > 0
+      rst.unshift tmp % 10
+      tmp /= 10
+    end
+    rst
+  end
 end
 
 # A fast combination count algorithm
@@ -69,4 +82,19 @@ class Array
     return binary_search(ele, lo, mid) if ele < self[mid]
     return binary_search(ele, mid + 1, hi)
   end
+
+  def sum
+    sum = 0
+    each do |x|
+      sum += x
+    end
+    sum
+  end
+end
+
+
+def time(&block)
+  beg = Time.now
+  block.call(beg)
+  puts 'Time spent: ' + (Time.now - beg).to_s + ' second(s).'
 end
