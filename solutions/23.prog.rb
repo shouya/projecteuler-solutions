@@ -1,4 +1,3 @@
-
 require_relative 'ext_lib'
 
 def all_abundant_nums
