@@ -96,6 +96,26 @@ class Array
     return binary_search(ele, mid + 1, hi)
   end
 
+  def binary_search_proc(ele, lo = 0, hi = self.length - 1, &block)
+    return false if lo > hi
+    return block.call(ele, self[lo]) == 0 ? lo : nil if lo == hi
+    mid = (lo + hi) / 2
+    cmp = block.call(ele, self[mid])
+    return mid if cmp == 0
+    return binary_search_proc(ele, lo, mid, &block) if cmp < 0
+    return binary_search_proc(ele, mid + 1, hi, &block)
+  end
+
+  def binary_search_assoc(no, lo = 0, hi = self.length - 1)
+    return false if lo > hi
+    return no == self[lo][0] ? lo : nil if lo == hi
+    mid = (lo + hi) / 2
+    cmp = no <=> self[mid][0]
+    return mid if cmp == 0
+    return binary_search_assoc(no, lo, mid) if cmp < 0
+    return binary_search_assoc(no, mid + 1, hi)
+  end
+
   def sum
     sum = 0
     each do |x|
