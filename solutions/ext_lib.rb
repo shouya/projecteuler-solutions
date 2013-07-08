@@ -52,6 +52,19 @@ class Integer
     end
     rst
   end
+
+  def pandigital?
+    s = n.to_s
+    next if s.length != 9
+    next if s.include? '0'
+    ns = Array.new(10)
+    s.each_char {|c| return false if ns.at(c.ord-48); ns[c.ord-48] = true }
+    true
+  end
+
+  def num_digits
+    to_s.size
+  end
 end
 
 # A fast combination count algorithm
