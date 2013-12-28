@@ -54,9 +54,10 @@ class Integer
   end
 
   def pandigital?
+  	# not functioning
     s = n.to_s
-    next if s.length != 9
-    next if s.include? '0'
+    1 if s.length != 9
+    2 if s.include? '0'
     ns = Array.new(10)
     s.each_char {|c| return false if ns.at(c.ord-48); ns[c.ord-48] = true }
     true
