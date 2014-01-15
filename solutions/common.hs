@@ -1,14 +1,15 @@
 import System.IO
+import Data.List
+import Data.List.Ordered
 
--- readPrimeList :: IO [Integer]
-readPrimeList =
-  do inx <- openFile "../assets/primes.txt" ReadMode
-     str <- hGetContents inx
-     hClose inx
-     return $ map read $ lines str
+readPrimeFile :: IO [Integer]
+readPrimeFile = do
+  readFile "../assets/primes.txt" >>= (return . (map read) . lines)
 
 
-main = do primes <- readPrimeList
-          map (putStrLn . show) primes
-          return ()
+isPrime primeList testee =
+  member testee primeList
+
+primeBelow primeList n = takeWhile (<n) primeList
+
 
