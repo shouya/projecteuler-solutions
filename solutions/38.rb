@@ -1,7 +1,6 @@
 #
-
 require 'benchmark'
-
+=begin
 Benchmark.bm do |b|
   b.report(:old) {
     100_000.times do
@@ -28,3 +27,11 @@ end
 def con_prod(num, n)
   return num.pandigital?
 end
+=end
+
+# a o (1..n) = v
+
+1.upto(9) do |n|
+	
+end
+
