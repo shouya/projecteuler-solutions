@@ -24,12 +24,12 @@ findCorners grp = map corner grp
 joinGroups :: [[NumPair]] -> [NumPair]
 joinGroups = concat
 
-countPrimes :: [Integer] -> [NumPair] -> [(Integer, Integer)]
-countPrimes primeList cornerList =
+countPrimes :: [NumPair] -> [(Integer, Integer)]
+countPrimes cornerList =
   scanl count (0,0) cornerList
   where count (np,nn) (l,n)
-          | isPrime primeList n = (np+1, nn+1)
-          | otherwise           = (np,   nn+1)
+          | isPrime' n = (np+1, nn+1)
+          | otherwise  = (np,   nn+1)
 
 calcFrequency :: [(Integer, Integer)] -> [NumPair] -> [(Float, NumPair)]
 calcFrequency count cornerList =
@@ -39,13 +39,12 @@ calcFrequency count cornerList =
 getResult freqList = head $ dropWhile (\(a,b) -> a >= 0.1) freqList
 
 main = do
-  primes <- readPrimeFile
   putStrLn $ show $ getResult $
-    calcFrequency (drop ndrop $ counting primes) (drop ndrop cornerNums)
+    calcFrequency (drop ndrop $ counting) (drop ndrop cornerNums)
 --  putStrLn $ show $ take 10 $ zip (drop ndrop $
 --     counting primes) (drop ndrop cornerNums)
   where cornerNums = (joinGroups . findCorners . groupByLayer) spiral
-        counting primes = countPrimes primes cornerNums
+        counting = countPrimes cornerNums
         ndrop = 10
 
 
