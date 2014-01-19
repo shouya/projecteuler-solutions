@@ -1,6 +1,7 @@
 module ProjectEuler
          ( readPrimeFile
          , isPrime
+         , isPrime'
          , primesBelow
          , isInt
          ) where
@@ -15,11 +16,11 @@ readPrimeFile = do
 isPrime :: [Integer] -> Integer -> Bool
 isPrime primeList testee = member testee primeList
 
-
+isPrime' :: Integer -> Bool
+isPrime' x = null [y | y<-[2..floor (sqrt (fromIntegral x))], x `mod` y == 0]
 
 primesBelow :: [Integer] -> Integer -> [Integer]
 primesBelow primeList n = takeWhile (<n) primeList
-
 
 isInt :: Float -> Bool
 -- isInt x = x == fromInteger (round x)
