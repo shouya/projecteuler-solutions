@@ -4,6 +4,9 @@ module ProjectEuler
          , isPrime'
          , primesBelow
          , isInt
+         , isSquareNumber
+         , member
+         , memberBy
          ) where
 
 import Data.List
@@ -25,6 +28,10 @@ primesBelow primeList n = takeWhile (<n) primeList
 isInt :: Float -> Bool
 -- isInt x = x == fromInteger (round x)
 isInt x = 0.0000001 > abs (x - fromInteger (round x))
+
+isSquareNumber :: Integer -> Bool
+isSquareNumber n = n == m*m
+  where m = floor $ sqrt $ fromInteger n
 
 
 -- Picked from Data.List.Ordered
