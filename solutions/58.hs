@@ -40,9 +40,8 @@ getResult freqList = head $ dropWhile (\(a,b) -> a >= 0.1) freqList
 
 main = do
   putStrLn $ show $ getResult $
-    calcFrequency (drop ndrop $ counting) (drop ndrop cornerNums)
---  putStrLn $ show $ take 10 $ zip (drop ndrop $
---     counting primes) (drop ndrop cornerNums)
+  calcFrequency (drop ndrop $ counting) (drop ndrop cornerNums)
+--  putStrLn $ show $ take 10 $ zip (drop ndrop counting) (drop ndrop cornerNums)
   where cornerNums = (joinGroups . findCorners . groupByLayer) spiral
         counting = countPrimes cornerNums
         ndrop = 10
