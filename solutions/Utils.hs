@@ -6,6 +6,8 @@ module Utils
        , lenGe
        , lenLt
        , lenLe
+       , isInt
+       , grepV
        ) where
 
 import Data.List
@@ -43,3 +45,7 @@ lenCmp cmp n str = (genericLength str) `cmp` n
 
 grepV :: (Eq a) => a -> [a] -> [a]
 grepV x = filter (x /=)
+
+
+isInt :: (Eq a, RealFrac a) => a -> Bool
+isInt x = x == fromInteger (round x)
