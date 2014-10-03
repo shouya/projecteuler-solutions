@@ -8,6 +8,9 @@ module Utils
        , lenLe
        , isInt
        , grepV
+       , primeFactors
+       , primes
+       , isPrime
        ) where
 
 import Data.List
@@ -49,3 +52,20 @@ grepV x = filter (x /=)
 
 isInt :: (Eq a, RealFrac a) => a -> Bool
 isInt x = x == fromInteger (round x)
+
+primeFactors :: Integer -> [Integer]
+primeFactors n =
+  case factors of
+    [] -> [n]
+    _  -> factors ++ primeFactors (n `div` (head factors))
+  where factors = take 1 $ filter (\x -> (n `mod` x) == 0) [2 .. n-1]
+
+
+primes :: [Integer]
+primes = 2 : filter (isPrime primes) [3,5..]
+  where isPrime (p:ps) n = p*p > n || n `rem` p /= 0 && isPrime ps n
+
+
+isPrime x = not $ any divisible $ takeWhile notTooBig [2..]
+  where divisible y = x `mod`y == 0
+        notTooBig y = y*y <= x
