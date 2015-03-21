@@ -1,18 +1,20 @@
 import Utils
-
 import Data.List
 
+beg = 0
+n = 3
 
-nPrimeFactors :: Integer -> Int
-nPrimeFactors = length . nub . primeFactors
+nPrimeFactors :: Int -> Int
+nPrimeFactors = length . distinctPrimeFactors
 
+pfmap :: [(Int, Int)]
+pfmap = zip l $ map nPrimeFactors l
+  where l = [beg..]
 
+pfgrouped :: [(Int, Int)]
+pfgrouped = map merge $ filter ((==n) . snd . head) $ groupBy ((==) `on` snd) pfmap
+  where merge = (fst . head) &&& length
 
-pfeq4 n = nPrimeFactors n == 4
+ans = find ((==n) . snd) pfgrouped
 
-bar 4 n = n
-bar a n = if pfeq4 (n+a)
-          then bar (succ a) n
-          else bar 0       (succ (n+a))
-
-foo = bar 0 40000
+main = print ans
