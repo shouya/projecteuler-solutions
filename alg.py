@@ -1,7 +1,7 @@
 '''
 Created on 2011-1-16
 
-@author: CMlr
+@author: Shou Ya
 '''
 
 import time
@@ -87,7 +87,7 @@ def rotations(n):
         for j in range(len(_s) - 1):
             _s[j] = _s[j + 1]
         _s[-1] = _tmp
-        lst.append(int(charlist2string(_s)))   
+        lst.append(int(charlist2string(_s)))
     return lst
 
 def product(*args, repeat=1):
@@ -108,7 +108,7 @@ def permutations(iterable, r=None):
     for indices in product(range(n), repeat=r):
         if len(set(indices)) == r:
             yield (pool[i] for i in indices)
-    
+
 def ncombinations(iterable, r):
     pool = tuple(iterable)
     _n = 0
@@ -135,7 +135,7 @@ def letterno(_char):
 
 def filecontent(filename):
     return open(filename).read()
-    
+
 
 # test code
 def runtime(func):
@@ -145,4 +145,3 @@ def runtime(func):
     new_t = time.clock()
     print("code finish run at:", "%.6fs" % (new_t))
     print("escaped:", "%.6fs" % (new_t - t))
-    
