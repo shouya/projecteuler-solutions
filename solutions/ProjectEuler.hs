@@ -10,17 +10,17 @@ module ProjectEuler
          ) where
 
 import Data.List
+import Data.Functor
 
 readPrimeFile :: IO [Integer]
-readPrimeFile = do
-  readFile "../assets/primes.txt" >>= (return . (map read) . lines)
+readPrimeFile = map read . lines <$> readFile "../assets/primes.txt"
 
 
 isPrime :: [Integer] -> Integer -> Bool
 isPrime primeList testee = member testee primeList
 
 isPrime' :: Integer -> Bool
-isPrime' x = null [y | y<-[2..floor (sqrt (fromIntegral x))], x `mod` y == 0]
+isPrime' x = null [y | y<-[2..truncate $ sqrt $ fromIntegral x], x `mod` y == 0]
 
 primesBelow :: [Integer] -> Integer -> [Integer]
 primesBelow primeList n = takeWhile (<n) primeList
@@ -46,4 +46,3 @@ memberBy cmp x = loop
       LT -> False
       EQ -> True
       GT -> loop ys
-
