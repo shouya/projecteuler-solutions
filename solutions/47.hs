@@ -2,7 +2,7 @@ import Utils
 import Data.List
 
 beg = 0
-n = 3
+n = 4
 
 nPrimeFactors :: Int -> Int
 nPrimeFactors = length . distinctPrimeFactors
