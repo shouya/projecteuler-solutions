@@ -9,6 +9,8 @@ module Utils
        , isInt
        , grepV
        , distinctPrimeFactors
+       , breakIntoDigits
+       , isPermutation
        , module Data.List
        , module Data.Function
        , module Control.Arrow
@@ -17,8 +19,11 @@ module Utils
 
 import Data.List
 import Data.Function
-import Control.Arrow
+import Control.Arrow hiding (arr)
 import Data.Numbers.Primes
+import Control.Monad.ST
+import Control.Monad
+import Data.Array.ST
 
 pandigital :: String -> Bool
 pandigital = pandigitalAux []
@@ -60,3 +65,19 @@ isInt x = x == fromInteger (round x)
 distinctPrimeFactors :: Integral a => a -> [a]
 distinctPrimeFactors n = filter ((== 0) . rem n) pm
   where pm = takeWhile (<= (fromIntegral n `div` 2)) primes
+
+breakIntoDigits :: Int -> [Int]
+breakIntoDigits 0 = []
+breakIntoDigits n = (n `rem` 10) : breakIntoDigits (n `div` 10)
+
+isPermutation :: Int -> Int -> Bool
+isPermutation a b = runST $ do
+  arr <- newArray (0,9) 0 :: ST s (STUArray s Int Int)
+  forM_ (breakIntoDigits a) $ \x -> do
+    n <- readArray arr x
+    writeArray arr x (n+1)
+  forM_ (breakIntoDigits b) $ \x -> do
+    n <- readArray arr x
+    writeArray arr x (n-1)
+  elems <- getElems arr
+  return $ all (==0) elems
