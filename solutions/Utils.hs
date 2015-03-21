@@ -8,19 +8,23 @@ module Utils
        , lenLe
        , isInt
        , grepV
-       , primeFactors
-       , primes
-       , isPrime
+       , distinctPrimeFactors
+       , module Data.List
+       , module Data.Function
+       , module Control.Arrow
+       , module Data.Numbers.Primes
        ) where
 
 import Data.List
-
+import Data.Function
+import Control.Arrow
+import Data.Numbers.Primes
 
 pandigital :: String -> Bool
 pandigital = pandigitalAux []
   where pandigitalAux _ [] = True
         pandigitalAux rst (x:xs) =
-          (x `notElem` rst) && (pandigitalAux (x:rst) xs)
+          x `notElem` rst && pandigitalAux (x:rst) xs
 
 noRepeat :: String -> Bool
 noRepeat = pandigital
@@ -43,7 +47,7 @@ lenLe = lenCmp (<=)
 
 type CMP = Integer -> Integer -> Bool
 lenCmp :: CMP -> Integer -> [a] -> Bool
-lenCmp cmp n str = (genericLength str) `cmp` n
+lenCmp cmp n str = genericLength str `cmp` n
 
 
 grepV :: (Eq a) => a -> [a] -> [a]
@@ -53,19 +57,6 @@ grepV x = filter (x /=)
 isInt :: (Eq a, RealFrac a) => a -> Bool
 isInt x = x == fromInteger (round x)
 
-primeFactors :: Integer -> [Integer]
-primeFactors n =
-  case factors of
-    [] -> [n]
-    _  -> factors ++ primeFactors (n `div` (head factors))
-  where factors = take 1 $ filter (\x -> (n `mod` x) == 0) [2 .. n-1]
-
-
-primes :: [Integer]
-primes = 2 : filter (isPrime primes) [3,5..]
-  where isPrime (p:ps) n = p*p > n || n `rem` p /= 0 && isPrime ps n
-
-
-isPrime x = not $ any divisible $ takeWhile notTooBig [2..]
-  where divisible y = x `mod`y == 0
-        notTooBig y = y*y <= x
+distinctPrimeFactors :: Integral a => a -> [a]
+distinctPrimeFactors n = filter ((== 0) . rem n) pm
+  where pm = takeWhile (<= (fromIntegral n `div` 2)) primes
